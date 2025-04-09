@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "235649527094",
+    "project_id": "shoppa-93917",
+    "storage_bucket": "shoppa-93917.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235649527094:android:0a27217df1017b888f1797",
+        "android_client_info": {
+          "package_name": "com.example.shoppa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvy7vk2M3mZPDebIpx2YKTHrv68mTyoy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
