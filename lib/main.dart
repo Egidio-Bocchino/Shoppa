@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shoppa/pages/account_page.dart';
-import 'package:shoppa/pages/home_page.dart';
 import 'package:shoppa/pages/login_page.dart';
 
 void main() {
