@@ -44,7 +44,8 @@ dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/logo/Logo_app.png"
+  image_path: "assets/logo/Logo_app2.png"
+  height: 5
 
 dev_dependencies:
   flutter_test:
