@@ -9,6 +9,9 @@ import 'package:shoppa/pages/sign_up_page.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
