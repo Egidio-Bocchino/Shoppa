@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
           ),
-          itemCount: 10,
+          itemCount: 20,
           itemBuilder: (BuildContext context, int index) {
             return ProductCard();
           },
