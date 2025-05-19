@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shoppa/pages/home_page.dart';
 import 'package:shoppa/pages/sign_up_page.dart';
 import '../core/config/theme/app_colors.dart';
-import '../services/auth_service.dart';
+import '../services/authentication/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
