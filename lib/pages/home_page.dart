@@ -1,46 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:shoppa/core/config/card/product_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shoppa/core/config/theme/app_colors.dart';
 import 'package:shoppa/core/config/card/category_card.dart';
 import 'package:shoppa/core/config/widget/custom_appbar.dart';
 import 'package:shoppa/core/config/widget/custom_bottombar.dart';
 import 'package:shoppa/core/config/card/deal_card.dart';
-import 'package:shoppa/pages/product_list_screen.dart';
-import '../core/models/product.dart';
+import 'package:shoppa/core/config/card/product_card.dart';
+import 'package:shoppa/core/models/product.dart';
+import 'package:shoppa/provider/product_stream_provider.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({super.key});
+class HomePage extends ConsumerStatefulWidget {
+  const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   void initState() {
-    //getProducts();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: CustomAppBar(),
-      bottomNavigationBar: CustomBottomNavigationBar(),
-      body: buildScreenView(),
+      bottomNavigationBar: const CustomBottomNavigationBar(),
+      body: _buildScreenView(),
     );
   }
 
-  SingleChildScrollView buildScreenView() {
+  Widget _buildScreenView() {
+    final productsAsyncValue = ref.watch(productsStreamProvider);
+
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(height: 30),
-          buildDealCard(),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
+          _buildDealCard(),
+          const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Align(
@@ -55,9 +56,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          SizedBox(height: 20),
-          buildCategoryCard(),
-          SizedBox(height: 30),
+          const SizedBox(height: 20),
+          _buildCategoryCard(),
+          const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Align(
@@ -72,30 +73,46 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          SizedBox(height: 20),
-          buildProductGrid(),
+
+          const SizedBox(height: 20),
+
+          _productGrid(productsAsyncValue),
         ],
       ),
     );
   }
 
-  GridView buildProductGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
+  SizedBox _productGrid(AsyncValue<List<Product>> productsAsyncValue) {
+    return SizedBox(
+      child: productsAsyncValue.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(child: Text('Errore nel caricamento dei prodotti: $error')),
+        data: (products) {
+          if (products.isEmpty) {
+            return const Center(child: Text('Nessun prodotto trovato.'));
+          }
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 0.75,
+            ),
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return ProductCard(product: product);
+            },
+          );
+        },
       ),
-      itemCount: 10,
-      itemBuilder: (BuildContext context, int index) {
-        return ProductsScreen();
-      },
     );
   }
 
-  SingleChildScrollView buildCategoryCard() {
+  Widget _buildCategoryCard() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -111,7 +128,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  SingleChildScrollView buildDealCard() {
+  Widget _buildDealCard() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
