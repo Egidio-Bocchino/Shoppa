@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shoppa/core/config/theme/app_colors.dart';
 
-class CategoryCard extends StatelessWidget {
-  final String? category;
-  CategoryCard({super.key, this.category});
+import '../../../services/provider/product_stream_provider.dart';
+
+class CategoryCard extends ConsumerWidget {
+  final String category;
+  CategoryCard({super.key, required this.category});
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 150,
-      height: 80,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedCategory = ref.watch(selectedCategoryProvider);
+    final bool isSelected = selectedCategory == category;
+
+    return GestureDetector(
+      onTap: () {
+        ref.read(selectedCategoryProvider.notifier).state = category;
+      },
       child: Card(
         color: AppColors.cardColor,
         child: Center(

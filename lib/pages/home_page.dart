@@ -6,8 +6,9 @@ import 'package:shoppa/core/config/widget/custom_appbar.dart';
 import 'package:shoppa/core/config/widget/custom_bottombar.dart';
 import 'package:shoppa/core/config/card/deal_card.dart';
 import 'package:shoppa/core/config/card/product_card.dart';
-import 'package:shoppa/core/models/product.dart';
-import 'package:shoppa/provider/product_stream_provider.dart';
+import 'package:shoppa/core/models/product_model.dart';
+import 'package:shoppa/pages/product_detail_page.dart';
+import '../services/provider/product_stream_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -35,6 +36,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _buildScreenView() {
     final productsAsyncValue = ref.watch(productsStreamProvider);
+    final categories = ref.watch(categoriesProvider);
 
     return SingleChildScrollView(
       child: Column(
@@ -76,7 +78,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
           const SizedBox(height: 20),
 
-          _productGrid(productsAsyncValue),
+          _productGrid(productsAsyncValue,),
         ],
       ),
     );
@@ -98,13 +100,24 @@ class _HomePageState extends ConsumerState<HomePage> {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 10,
+              mainAxisExtent: 250,
               mainAxisSpacing: 10,
               childAspectRatio: 0.75,
             ),
             itemCount: products.length,
             itemBuilder: (context, index) {
               final product = products[index];
-              return ProductCard(product: product);
+              return ProductCard(
+                product: product,
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailPage(product: product)
+                    )
+                  );
+                },
+              );
             },
           );
         },

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shoppa/core/config/theme/app_colors.dart';
-import 'package:shoppa/core/models/product.dart';
+import 'package:shoppa/core/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
+  final VoidCallback onTap;
 
   const ProductCard({
     super.key,
     required this.product,
+    required this.onTap,
   });
 
   @override
@@ -16,42 +18,44 @@ class ProductCard extends StatelessWidget {
       color: AppColors.cardColor,
       margin: const EdgeInsets.symmetric(horizontal: 0.0),
       elevation: 4.0,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.network(
-                product.thumbnail,
-                width: 130,
-                height: 130,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                const Icon(Icons.broken_image, size: 80),
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                            : null,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8.0),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.network(
+                  product.thumbnail,
+                  width: 130,
+                  height: 130,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.broken_image, size: 80),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
 
-            const SizedBox(height: 5),
+              const SizedBox(height: 20),
 
-            Expanded(
-              child: Column(
+              Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
@@ -73,12 +77,12 @@ class ProductCard extends StatelessWidget {
                       color: AppColors.cardTextCol,
                       fontWeight: FontWeight.w600,
                     ),
-                    textAlign: TextAlign.center, // Centra il prezzo
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
