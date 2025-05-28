@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shoppa/core/config/theme/app_colors.dart';
 import 'package:shoppa/pages/cart_page.dart';
 import 'package:shoppa/pages/home_page.dart';
 import 'package:shoppa/pages/account_page.dart';
+import '../theme/app_colors.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({Key? key}) : super(key: key);

@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shoppa/pages/home_page.dart';
 import 'package:shoppa/pages/sign_up_page.dart';
-import '../core/config/theme/app_colors.dart';
+import '../core/theme/app_colors.dart';
+import '../core/widget/custom_email_box.dart';
+import '../core/widget/custom_password_box.dart';
 import '../services/authentication/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,9 +16,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   String _errorMessage = '';
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +28,79 @@ class _LoginPageState extends State<LoginPage> {
       appBar: buildAppBar(),
       body: Center(
         child: SingleChildScrollView(
-          child: Column(
-           mainAxisAlignment: MainAxisAlignment.center,
-           children: [
-            SizedBox(height: 50),
-            _buildEmailTextField(),
-            SizedBox(height: 15),
-            _buildPasswordTextField(),
-            Text(
-            _errorMessage,
-            style: const TextStyle(color: Colors.red),
+          child: Form(
+            key: _formKey,
+            child: Column(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+              const SizedBox(height: 50,),
+               _emailBox(),
+
+               const SizedBox(height: 15,),
+
+               _passwordBox(),
+
+               const SizedBox(height: 10),
+
+               Text(
+                 _errorMessage,
+                 style: const TextStyle(color: Colors.red),
+               ),
+
+               const SizedBox(height: 15),
+
+               loginButton(context),
+
+               const SizedBox(height: 10),
+
+               signUpButton(context),
+             ],
             ),
-            SizedBox(height: 15),
-            loginButton(context),
-            SizedBox(height: 10),
-            signUpButton(context),
-           ],
           ),
         ),
       )
+    );
+  }
+
+  SizedBox _emailBox() {
+    return SizedBox(
+     width: 300,
+     child: CustomEmailBox(
+       controller: _emailController,
+
+       labelText: 'Email',
+
+       validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Inserisci la tua email';
+        }
+        if (!value.contains('@')) {
+          return 'Inserisci un indirizzo email valido';
+        }
+        return null;
+       },
+     ),
+    );
+  }
+
+  SizedBox _passwordBox() {
+    return SizedBox(
+      width: 300,
+      child: CustomPasswordBox(
+        controller: _passwordController,
+
+        labelText: 'Password',
+
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Inserisci la tua password';
+          }
+          if (value.length < 6) {
+            return 'La password deve avere almeno 6 caratteri';
+          }
+          return null;
+        },
+      ),
     );
   }
 
@@ -69,11 +126,11 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SignUpPage()),
+          MaterialPageRoute(builder: (context) => const SignUpPage()),
         );
       },
       style: ButtonStyle(
-        fixedSize: WidgetStateProperty.all(Size.fromWidth(160)),
+        fixedSize: WidgetStateProperty.all(const Size.fromWidth(160)),
         backgroundColor: WidgetStateProperty.all(AppColors.cardColor),
       ),
       child: Text(
@@ -87,7 +144,9 @@ class _LoginPageState extends State<LoginPage> {
   FilledButton loginButton(BuildContext context) {
     return FilledButton(
       onPressed: () async {
-        await _signIn();
+        if (_formKey.currentState!.validate()) {
+          await _signIn();
+        }
       },
       style: ButtonStyle(
         fixedSize: WidgetStateProperty.all(Size.fromWidth(160)),
@@ -100,61 +159,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildPasswordTextField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 100,
-          width: 300,
-          child: TextField(
-            controller: _passwordController,
-            obscureText: true,
-            style: TextStyle(color: AppColors.cardTextCol),
-            cursorColor: AppColors.primary,
-            decoration: InputDecoration(
-              labelText: 'Password',
-              labelStyle: TextStyle(color: AppColors.cardTextCol),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEmailTextField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 300,
-          child: TextField(
-            controller: _emailController,
-            style: TextStyle(color: AppColors.cardTextCol),
-            cursorColor: AppColors.primary,
-            decoration: InputDecoration(
-              labelText: 'Email',
-              labelStyle: TextStyle(color: AppColors.cardTextCol),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Future<void> _signIn() async {
+    setState(() {
+      _errorMessage = '';
+    });
+
     try {
       await authService.value.signIn(
         email: _emailController.text,
@@ -187,10 +196,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void pushPage(BuildContext context) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 }

@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shoppa/core/config/theme/app_colors.dart';
-import 'package:shoppa/core/config/widget/custom_appbar.dart';
-import 'package:shoppa/core/config/widget/custom_bottombar.dart';
 import 'package:shoppa/pages/login_page.dart';
+import '../core/theme/app_colors.dart';
+import '../core/widget/custom_bottombar.dart';
 import '../services/authentication/auth_service.dart';
 
 class AccountPage extends StatelessWidget {
@@ -43,48 +42,46 @@ class AccountPage extends StatelessWidget {
     final User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: CustomAppBar(),
+      appBar: AppBar(
+        title: const Text('Account'),
+        backgroundColor: AppColors.background,
+        foregroundColor: AppColors.primary,
+        centerTitle: true,
+      ),
       body: Expanded(
         child: Column(
           children: [
-            const SizedBox(height: 30),
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/logo/Logo_app2.png'),
-            ),
             const SizedBox(height: 50),
             Center(
-              child:
-              RichText(
+              child: RichText(
                 text: TextSpan(
                   style: TextStyle(fontSize: 20),
                   children: [
                     TextSpan(
-                      text: 'Nome Utente: ',
+                      text: 'Indirizzo Email: ',
                       style: TextStyle(color: AppColors.primary),
                     ),
                     TextSpan(
-                      text: user?.displayName ?? 'Nome',
+                      text: user?.email ?? 'Email',
                       style: TextStyle(color: AppColors.cardTextCol),
                     ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            RichText(
-              text: TextSpan(
-                style: TextStyle(fontSize: 20),
-                children: [
-                  TextSpan(
-                    text: 'Indirizzo Email: ',
-                    style: TextStyle(color: AppColors.primary),
+            const SizedBox(height: 40,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Ultimi acquisti',
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                  TextSpan(
-                    text: user?.email ?? 'Email',
-                    style: TextStyle(color: AppColors.cardTextCol),
-                  ),
-                ],
+                ),
               ),
             ),
             const Spacer(),
