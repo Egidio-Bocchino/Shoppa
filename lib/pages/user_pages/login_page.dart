@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shoppa/pages/home_page.dart';
-import 'package:shoppa/pages/sign_up_page.dart';
-import '../core/theme/app_colors.dart';
-import '../core/widget/custom_email_box.dart';
-import '../core/widget/custom_password_box.dart';
-import '../services/authentication/auth_service.dart';
+import 'package:shoppa/pages/products_pages/home_page.dart';
+import 'package:shoppa/pages/user_pages/sign_up_page.dart';
+
+import '../../core/theme/app_colors.dart';
+import '../../core/widget/custom_email_box.dart';
+import '../../core/widget/custom_password_box.dart';
+import '../../services/authentication/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

@@ -2,13 +2,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shoppa/core/models/product_model.dart';
-import 'package:shoppa/pages/product_detail_page.dart';
-import '../core/card/category_card.dart';
-import '../core/card/product_card.dart';
-import '../core/theme/app_colors.dart';
-import '../core/widget/custom_appbar.dart';
-import '../core/widget/custom_bottombar.dart';
-import '../services/provider/product_stream_provider.dart';
+import 'package:shoppa/pages/products_pages/product_detail_page.dart';
+import '../../core/card/category_card.dart';
+import '../../core/card/product_card.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/widget/custom_appbar.dart';
+import '../../core/widget/custom_bottombar.dart';
+import '../../services/provider/product_stream_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});

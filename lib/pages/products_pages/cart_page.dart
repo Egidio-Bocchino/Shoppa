@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../core/card/cart_card.dart';
-import '../core/models/cart_item.dart';
-import '../core/theme/app_colors.dart';
-import '../core/widget/custom_bottombar.dart';
-import '../services/provider/cart_provider.dart';
+import '../../core/card/cart_card.dart';
+import '../../core/models/cart_item.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/widget/custom_bottombar.dart';
+import '../../services/provider/cart_provider.dart';
 import 'package:shoppa/core/models/product_model.dart';
 
 class CartPage extends ConsumerWidget {

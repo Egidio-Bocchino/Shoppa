@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shoppa/pages/login_page.dart';
-import '../core/theme/app_colors.dart';
-import '../core/widget/custom_bottombar.dart';
-import '../services/authentication/auth_service.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/widget/custom_bottombar.dart';
+import '../../services/authentication/auth_service.dart';
+import 'login_page.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});

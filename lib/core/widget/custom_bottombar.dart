@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shoppa/pages/cart_page.dart';
-import 'package:shoppa/pages/home_page.dart';
-import 'package:shoppa/pages/account_page.dart';
+import 'package:shoppa/pages/products_pages/cart_page.dart';
+import 'package:shoppa/pages/products_pages/home_page.dart';
+import 'package:shoppa/pages/user_pages/account_page.dart';
 import '../theme/app_colors.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {

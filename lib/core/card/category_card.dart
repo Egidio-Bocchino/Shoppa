@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shoppa/services/provider/product_stream_provider.dart';
-import '../../../pages/filtered_page.dart';
+import '../../pages/products_pages/filtered_page.dart';
 import '../theme/app_colors.dart';
 
 class CategoryCard extends ConsumerWidget {

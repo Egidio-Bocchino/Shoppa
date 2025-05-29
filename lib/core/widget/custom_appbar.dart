@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../pages/product_detail_page.dart';
+import '../../pages/products_pages/product_detail_page.dart';
 import '../../../services/provider/search_provider.dart';
 import '../theme/app_colors.dart';
 
