@@ -39,33 +39,21 @@ class FilteredPage extends ConsumerWidget{
     );
   }
 
-  Widget? _filterBuilder(products) {
-    final discountBounds = selectedDiscountRange != null
-      ? discountRange[selectedDiscountRange] : null;
-
+  Widget? _filterBuilder(List<dynamic> products) {
     final filteredProducts = products.where((product) {
       bool matchesCategory = true;
       if (selectedCategory != null){
         matchesCategory = product.category.toLowerCase() == selectedCategory!.toLowerCase();
       }
 
-      bool matchesDiscount = true;
-      if ( discountBounds != null){
-        final double minDiscount = discountBounds[0];
-        final double maxDiscount = discountBounds[1];
-        matchesDiscount = product.discountPercentage >= minDiscount && product.discountPercentage <= maxDiscount;
-      }
 
-      return matchesCategory && matchesDiscount;
+      return matchesCategory;
     }).toList();
 
     if (filteredProducts.isEmpty) {
       String message = 'Nessun prodotto disponibile';
       if (selectedCategory != null) {
         message += ' per la categoria "$selectedCategory"';
-      }
-      if (selectedDiscountRange != null) {
-        message += ' con sconto "$selectedDiscountRange"';
       }
       return Center(child: Text(message.toUpperCase(),));
     }

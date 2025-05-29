@@ -2,6 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shoppa/core/models/product_model.dart';
 import 'package:shoppa/services/provider/product_stream_provider.dart';
 
+import '../../core/exception/data_parsing_exception.dart';
+import '../../core/exception/exception_handler.dart';
+
 class SearchProvider{
   final Ref _ref;
 
@@ -21,7 +24,14 @@ class SearchProvider{
         return AsyncValue.data(filteredProducts);
       },
       loading: () => const AsyncValue.loading(),
-      error: (error, stackTrace) => AsyncValue.error(error, stackTrace),
+      error: (error, stackTrace) {
+        if (error is DataParsingException) {
+          ExceptionHandler.handleDataParsingException(error, stackTrace, context: 'SearchProvider - searchProducts');
+        } else {
+          ExceptionHandler.handle(error, stackTrace, context: 'SearchProvider - searchProducts: Errore generico');
+        }
+        return AsyncValue.error(error, stackTrace);
+      },
     );
   }
 }

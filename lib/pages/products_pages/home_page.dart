@@ -137,36 +137,26 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   _buildCategoryCards() {
-    final categoriesAsyncValue = ref.watch(categoriesProvider);
+    final categories = ref.watch(categoriesProvider);
 
-    return categoriesAsyncValue.when(
-      data: (categories) {
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: Row(
-            children: categories.map((category) => CategoryCard(category: category)).toList(),
-          ),
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Center(child: Text('Errore nel caricamento delle categorie: $error')),
+    if (categories.isEmpty) {
+      return const Center(
+        child: Text(
+          'Nessuna categoria disponibile.',
+          style: TextStyle(color: AppColors.cardTextCol),
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+      child: Row(
+        children: categories.map((category) => CategoryCard(category: category)).toList(),
+      ),
     );
   }
 
- /* _buildDealCard() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          DealCard(dealLabel: '10% OFF'),
-          DealCard(dealLabel: '20% OFF'),
-          DealCard(dealLabel: '30% OFF'),
-          DealCard(dealLabel: '50% OFF'),
-        ],
-      ),
-    );
-  }*/
 
   Future<void> _onRefresh() async{
     ref.invalidate(productsStreamProvider);

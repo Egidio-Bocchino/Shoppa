@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shoppa/services/authentication/auth_manager.dart';
+import 'package:shoppa/pages/user_pages/splash_page.dart';
 import 'core/models/review_model.dart';
 import 'firebase_options.dart';
 
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const AuthManager(),
+      home: const SplashPage(),
     );
   }
 }
