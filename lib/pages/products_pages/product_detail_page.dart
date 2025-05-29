@@ -1,3 +1,4 @@
+// lib/pages/products_pages/product_detail_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shoppa/core/models/product_model.dart';
@@ -15,6 +16,27 @@ class ProductDetailPage extends ConsumerWidget {
     required this.product,
   });
 
+  void _showReviewDialog(BuildContext context, Product product) async {
+    final result = await showDialog<Map<String, dynamic>?>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return ReviewDialog(
+          productId: product.id,
+        );
+      },
+    );
+    if (result != null && result.containsKey('success')) {
+      if (result['success'] == true) {
+        // Recensione aggiunta con successo.
+        // La UI si aggiornerà automaticamente grazie a Riverpod e notifyListeners nel ReviewManager.
+        // Puoi aggiungere qui un log o un feedback aggiuntivo se necessario.
+      } else {
+        // Errore nell'aggiunta della recensione.
+        // Il dialog dovrebbe già aver mostrato un messaggio di errore.
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final reviewManager = ref.watch(reviewManagerProvider);
@@ -23,7 +45,7 @@ class ProductDetailPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(product.title),
+        title: Text(product.title, style: TextStyle(color: AppColors.primary)),
         centerTitle: true,
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.primary,
@@ -40,6 +62,7 @@ class ProductDetailPage extends ConsumerWidget {
                 child: Image.network(
                   product.thumbnail,
                   height: 250,
+                  width: double.infinity,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) =>
                   const Icon(Icons.broken_image, size: 150, color: Colors.grey),
@@ -60,7 +83,7 @@ class ProductDetailPage extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '\$${product.price.toStringAsFixed(2)}',
+              '\€${product.price.toStringAsFixed(2)}',
               style: const TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
@@ -70,7 +93,6 @@ class ProductDetailPage extends ConsumerWidget {
             const SizedBox(height: 8),
             _buildDetailRow('Brand:', product.brand),
             _buildDetailRow('Categoria:', product.category),
-            _buildDetailRow('Stock:', product.stock.toString()),
             const SizedBox(height: 16),
             Text(
               product.description,
@@ -87,7 +109,10 @@ class ProductDetailPage extends ConsumerWidget {
             ),
             const SizedBox(height: 10),
             productReviews.isEmpty
-                ? const Text('Nessuna recensione disponibile per questo prodotto.', style: TextStyle(color: Colors.grey))
+                ? const Text(
+                  'Nessuna recensione disponibile per questo prodotto.',
+                  style: TextStyle(color: AppColors.cardTextCol)
+                  )
                 : ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -106,31 +131,29 @@ class ProductDetailPage extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: AppColors.primary,
-                        content: Text('${product.title} aggiunto al carrello!', style: TextStyle(color: AppColors.background)),
+                        content: Text(
+                          '${product.title} aggiunto al carrello!',
+                          style: TextStyle(color: AppColors.background)
+                        ),
                         duration: const Duration(milliseconds: 500),
                       ),
                     );
                   },
-                  icon: const Icon(Icons.shopping_cart, color: AppColors.background),
-                  label: const Text('Aggiungi al Carrello', style: TextStyle(color: AppColors.background)),
+                  icon: const Icon(Icons.shopping_cart, color: AppColors.cardTextCol),
+                  label: const Text('Aggiungi al Carrello', style: TextStyle(color: AppColors.cardTextCol)),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
+                    backgroundColor: AppColors.cardColor,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton.icon(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => ReviewDialog(productId: product.id),
-                    );
-                  },
-                  icon: const Icon(Icons.rate_review, color: AppColors.background),
-                  label: const Text('Lascia una recensione', style: TextStyle(color: AppColors.background)),
+                  onPressed: () => _showReviewDialog(context, product),
+                  icon: const Icon(Icons.rate_review, color: AppColors.cardTextCol),
+                  label: const Text('Lascia una recensione', style: TextStyle(color: AppColors.cardTextCol)),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
+                    backgroundColor: AppColors.cardColor,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),

@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shoppa/core/models/review_model.dart';
 import '../../services/manager/review_manager.dart';
+import '../exception/exception_handler.dart';
 import '../theme/app_colors.dart';
+import 'image_handler.dart';
 
 class ReviewDialog extends ConsumerStatefulWidget {
   final int productId;
@@ -22,9 +24,17 @@ class ReviewDialog extends ConsumerStatefulWidget {
 class _ReviewDialogState extends ConsumerState<ReviewDialog> {
   final TextEditingController _reviewController = TextEditingController();
   double currentRating = 0.0;
-  File? _selectedImage;
+  File? _currentImageInDialog;
   bool _isPickingImage = false;
-  final ImagePicker _picker = ImagePicker();
+  final ImageHandler _imageHandler = ImageHandler();
+
+  @override
+  void initState() {
+    super.initState();
+    _reviewController.text = '';
+    currentRating = 0.0;
+    _currentImageInDialog = null;
+  }
 
   @override
   void dispose() {
@@ -32,31 +42,40 @@ class _ReviewDialogState extends ConsumerState<ReviewDialog> {
     super.dispose();
   }
 
-  /// Seleziona un'immagine dalla fotocamera
-  Future<void> _pickImage() async {
+  Future<void> _pickImageFromCamera() async {
+    if (_isPickingImage) return;
+
     setState(() {
       _isPickingImage = true;
     });
+
     try {
-      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
+      final File? pickedFile = await _imageHandler.pickImage(ImageSource.camera);
+
+      if (!mounted) return;
+
       if (pickedFile != null) {
         setState(() {
-          _selectedImage = File(pickedFile.path);
+          _currentImageInDialog = pickedFile;
         });
       }
-    } catch (e) {
-      print('Errore nella selezione dell\'immagine dalla fotocamera: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Errore nella selezione dell\'immagine: ${e.toString()}', style: TextStyle(color: AppColors.background)),
-          duration: const Duration(seconds: 3),
-        ),
-      );
+    } catch (e, s) {
+      ExceptionHandler.handle(e, s, context: 'ReviewDialog - _pickImageFromCamera');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Errore nella selezione dell\'immagine: ${e.toString()}', style: TextStyle(color: AppColors.background)),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
     } finally {
-      setState(() {
-        _isPickingImage = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isPickingImage = false;
+        });
+      }
     }
   }
 
@@ -92,7 +111,7 @@ class _ReviewDialogState extends ConsumerState<ReviewDialog> {
               divisions: 5,
               label: currentRating.toString(),
               activeColor: AppColors.primary,
-              inactiveColor: AppColors.cardColor,
+              inactiveColor: AppColors.cardTextCol,
               onChanged: (newValue) {
                 setState(() {
                   currentRating = newValue;
@@ -103,34 +122,43 @@ class _ReviewDialogState extends ConsumerState<ReviewDialog> {
               controller: _reviewController,
               decoration: InputDecoration(
                 hintText: 'Scrivi la tua recensione...',
-                hintStyle: TextStyle(color: AppColors.cardTextCol.withOpacity(0.6)),
-                filled: true,
-                fillColor: AppColors.cardColor,
+                hintStyle: TextStyle(color: AppColors.cardTextCol),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   borderSide: BorderSide.none,
                 ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(color: AppColors.cardTextCol.withOpacity(0.5)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
+                filled: true,
+                fillColor: AppColors.cardColor,
               ),
               maxLines: 3,
               style: TextStyle(color: AppColors.cardTextCol),
+              cursorColor: AppColors.primary,
             ),
             const SizedBox(height: 16),
-            if (_selectedImage == null)
+            if (_currentImageInDialog == null)
               ElevatedButton.icon(
-                onPressed: _isPickingImage ? null : _pickImage,
+                onPressed: _isPickingImage ? null : _pickImageFromCamera,
                 icon: _isPickingImage
                     ? const SizedBox(
                   width: 20,
                   height: 20,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: AppColors.primary,
+                    color: AppColors.cardTextCol,
                   ),
                 )
-                    : const Icon(Icons.camera_alt, color: AppColors.primary),
+                    : const Icon(Icons.camera_alt, color: AppColors.cardTextCol),
                 label: Text(
                   _isPickingImage ? 'Caricamento...' : 'Aggiungi Foto',
-                  style: TextStyle(color: AppColors.primary),
+                  style: TextStyle(color: AppColors.cardTextCol),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.cardColor,
@@ -144,9 +172,9 @@ class _ReviewDialogState extends ConsumerState<ReviewDialog> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.file(
-                      _selectedImage!,
+                      _currentImageInDialog!,
                       height: 150,
-                      width: double.infinity,
+                      width: 150,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -154,7 +182,7 @@ class _ReviewDialogState extends ConsumerState<ReviewDialog> {
                     icon: const Icon(Icons.cancel, color: Colors.red),
                     onPressed: () {
                       setState(() {
-                        _selectedImage = null;
+                        _currentImageInDialog = null;
                       });
                     },
                   ),
@@ -166,7 +194,7 @@ class _ReviewDialogState extends ConsumerState<ReviewDialog> {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(null);
           },
           child: Text('Annulla', style: TextStyle(color: AppColors.primary)),
         ),
@@ -175,13 +203,15 @@ class _ReviewDialogState extends ConsumerState<ReviewDialog> {
               ? null
               : () async {
             if (user == null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.red,
-                  content: Text('Devi essere loggato per aggiungere una recensione!', style: TextStyle(color: AppColors.background)),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.orange,
+                    content: Text('Devi essere loggato per lasciare una recensione.', style: TextStyle(color: AppColors.background)),
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+              }
               return;
             }
 
@@ -197,28 +227,37 @@ class _ReviewDialogState extends ConsumerState<ReviewDialog> {
                 imageUrl: null,
               );
 
-              await reviewManager.addReview(newReview, _selectedImage);
+              await reviewManager.addReview(newReview, _currentImageInDialog);
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: AppColors.primary,
-                  content: Text('Recensione aggiunta con successo!', style: TextStyle(color: AppColors.background)),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
-              Navigator.of(context).pop();
-            } catch (e) {
-              print('Errore aggiunta recensione locale: $e');
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.red,
-                  content: Text('Errore nell\'aggiunta della recensione: ${e.toString()}', style: TextStyle(color: AppColors.background)),
-                  duration: const Duration(seconds: 3),
-                ),
-              );
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: AppColors.primary,
+                    content: Text('Recensione aggiunta con successo!', style: TextStyle(color: AppColors.background)),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+                Navigator.of(context).pop({'success': true});
+              }
+            } catch (e, s) {
+              ExceptionHandler.handle(e, s, context: 'ReviewDialog - addReview');
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.red,
+                    content: Text('Errore nell\'aggiunta della recensione: ${e.toString()}', style: TextStyle(color: AppColors.background)),
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+                Navigator.of(context).pop({'success': false});
+              }
             }
           },
-          child: Text('Invia Recensione', style: TextStyle(color: AppColors.cardTextCol)),
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.cardColor)),
+          child: Text(
+              'Invia Recensione',
+              style: TextStyle(color: AppColors.cardTextCol)
+          ),
         ),
       ],
     );
