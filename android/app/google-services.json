@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "235649527094",
+    "firebase_url": "https://shoppa-93917-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "shoppa-93917",
     "storage_bucket": "shoppa-93917.firebasestorage.app"
   },
@@ -12,7 +13,12 @@
           "package_name": "com.example.shoppa"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "235649527094-vfedaq8k7tiocuauau62jhbvdg6naq9d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBvy7vk2M3mZPDebIpx2YKTHrv68mTyoy0"
@@ -20,7 +26,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "235649527094-vfedaq8k7tiocuauau62jhbvdg6naq9d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "235649527094-1qij687l6rtf8p2hei566vd3vngae3ra.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.shoppa"
+              }
+            }
+          ]
         }
       }
     }
