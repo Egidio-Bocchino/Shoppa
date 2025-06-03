@@ -70,6 +70,7 @@ class CartCard extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
+                        key: Key('remove_item_${item.product.id}'),
                         icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent),
                         onPressed: () {
                           // Decrement quantity or remove if quantity is 1
@@ -77,6 +78,7 @@ class CartCard extends ConsumerWidget {
                         },
                       ),
                       Text(
+                        key: Key('quantity_${item.product.id}'),
                         '${item.quantity}',
                         style: const TextStyle(
                           fontSize: 16.0,
@@ -92,6 +94,7 @@ class CartCard extends ConsumerWidget {
                         icon: const Icon(Icons.add_circle_outline, color: Colors.greenAccent),
                       ),
                       IconButton(
+                        key: Key('delete_item_${item.product.id}'),
                         icon: const Icon(Icons.delete, color: Colors.grey),
                         onPressed: () {
                           ref.read(cartProvider).removeAllOfProduct(item.product);

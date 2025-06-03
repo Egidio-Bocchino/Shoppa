@@ -1,1 +1,28 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"shoppa-93917","appId":"1:235649527094:android:0a27217df1017b888f1797","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"shoppa-93917","configurations":{"android":"1:235649527094:android:0a27217df1017b888f1797","ios":"1:235649527094:ios:b6ba111a7ce59e0e8f1797","macos":"1:235649527094:ios:b6ba111a7ce59e0e8f1797","web":"1:235649527094:web:ef87818c86a9f4ab8f1797","windows":"1:235649527094:web:37b35251b08f8f968f1797"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "shoppa-93917",
+          "appId": "1:235649527094:android:0a27217df1017b888f1797",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "shoppa-93917",
+          "configurations": {
+            "android": "1:235649527094:android:0a27217df1017b888f1797",
+            "ios": "1:235649527094:ios:b6ba111a7ce59e0e8f1797",
+            "macos": "1:235649527094:ios:b6ba111a7ce59e0e8f1797",
+            "web": "1:235649527094:web:ef87818c86a9f4ab8f1797",
+            "windows": "1:235649527094:web:37b35251b08f8f968f1797"
+          }
+        }
+      }
+    }
+  },
+  "emulators": {
+    "singleProjectMode": true
+  }
+}
