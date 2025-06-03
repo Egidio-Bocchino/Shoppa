@@ -1,4 +1,3 @@
-// lib/pages/products_pages/product_detail_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shoppa/core/models/product_model.dart';
@@ -8,8 +7,7 @@ import '../../core/widget/review_dialog.dart';
 import '../../services/manager/review_manager.dart';
 import '../../services/provider/cart_provider.dart';
 
-
-class ProductDetailPage extends ConsumerStatefulWidget { // Modifica qui
+class ProductDetailPage extends ConsumerStatefulWidget {
   final Product product;
 
   const ProductDetailPage({
@@ -18,7 +16,7 @@ class ProductDetailPage extends ConsumerStatefulWidget { // Modifica qui
   });
 
   @override
-  ConsumerState<ProductDetailPage> createState() => _ProductDetailPageState(); // Modifica qui
+  ConsumerState<ProductDetailPage> createState() => _ProductDetailPageState();
 }
 
 class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {

@@ -100,15 +100,16 @@ class CartPage extends ConsumerWidget {
                 padding: WidgetStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.symmetric(vertical: 15.0)),
               ),
               onPressed: () {
-                final List<CartItem> itemstToPurchase = List.from(cart.productsInCart);
-                final double purcheseTotalPrice = cart.totalPrice;
+                final List<CartItem> itemsToPurchase = List.from(cart.productsInCart);
+                final double purchasesTotalPrice = cart.totalPrice;
 
-                ref.read(purchaseManagerProvider).addPurchase(itemstToPurchase, purcheseTotalPrice);
+                ref.read(purchaseManagerProvider).addPurchase(itemsToPurchase, purchasesTotalPrice);
 
                 Future.delayed(
                   const Duration(milliseconds: 500), () {
                   Navigator.pop(context);
                 });
+
                 ref.read(cartProvider).clearCart();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

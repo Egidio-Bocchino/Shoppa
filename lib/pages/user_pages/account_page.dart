@@ -41,7 +41,7 @@ class AccountPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final User? user = FirebaseAuth.instance.currentUser;
     final purchaseManager = ref.watch(purchaseManagerProvider);
-    final lastPurchase = purchaseManager.getList();
+    late final lastPurchase = purchaseManager.getList();
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -150,6 +150,19 @@ class AccountPage extends ConsumerWidget {
             child: FilledButton(
               onPressed: () {
                 _deleteAccount(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    elevation: 14,
+                    backgroundColor: AppColors.cardColor,
+                    content: Text('Account eliminato!', style: TextStyle(color: AppColors.cardTextCol),),
+                    duration: const Duration(seconds: 5),
+                  ),
+                );
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                      (Route<dynamic> route) => false,
+                );
               },
               style: ButtonStyle(
                 fixedSize: WidgetStateProperty.all(const Size.fromWidth(160)),

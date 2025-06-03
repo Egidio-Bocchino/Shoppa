@@ -12,10 +12,10 @@ class PurchaseManager extends ChangeNotifier{
   List<Purchase> get purchases => _purchases;
 
   PurchaseManager(){
-    _loadPurchases();
+    loadPurchases();
   }
 
-  Future<void> _loadPurchases() async{
+  Future<void> loadPurchases() async{
     final pref = await SharedPreferences.getInstance();
     final String? purchasesString = pref.getString(_purchasesKey);
     if(purchasesString != null){
