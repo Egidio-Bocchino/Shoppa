@@ -37,19 +37,16 @@ class AuthService{
     }
   }
 
-  Future<void> resetPassword({
-    required String email,
-  }) async {
-    return await firebaseAuth.sendPasswordResetEmail(email: email);
-  }
-
   Future<void> deleteAccount() async {
     try {
       await authService.value.deleteAccount();
     } on FirebaseAuthException catch (e) {
       print(e.message);
+    }on FirebaseException catch(e){
+      print(e.message);
+    }on Exception catch(e){
+      print('account non eliminato');
     }
   }
-
 
 }

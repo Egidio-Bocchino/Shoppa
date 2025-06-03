@@ -18,6 +18,7 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -45,8 +46,6 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            //const SizedBox(height: 30),
-            //_buildDealCard(),
             const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -62,9 +61,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
               ),
             ),
+
             const SizedBox(height: 20),
+
             _buildCategoryCards(),
+
             const SizedBox(height: 30),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Align(

@@ -17,7 +17,7 @@ class CustomEmailBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.emailAddress,
       cursorColor: AppColors.primary,
       decoration: InputDecoration(
         errorStyle: const TextStyle(height: 0),
