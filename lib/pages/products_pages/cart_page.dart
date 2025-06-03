@@ -6,6 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/widget/custom_bottombar.dart';
 import '../../services/provider/cart_provider.dart';
 import 'package:shoppa/core/models/product_model.dart';
+import '../../services/manager/purchase_manager.dart';
 
 class CartPage extends ConsumerWidget {
   const CartPage({super.key});
@@ -46,9 +47,18 @@ class CartPage extends ConsumerWidget {
           ],
         ),
       )
-          : Column(
+      : Column(
         children: [
-          _listCart(productsInCart, ref),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8.0),
+              itemCount: productsInCart.length,
+              itemBuilder: (context, index) {
+                final cartItem = productsInCart[index];
+                return CartCard(item: cartItem);
+              },
+            ),
+          ),
           _checkOutButton(cart, context, ref),
         ],
       ),
@@ -90,6 +100,11 @@ class CartPage extends ConsumerWidget {
                 padding: WidgetStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.symmetric(vertical: 15.0)),
               ),
               onPressed: () {
+                final List<CartItem> itemstToPurchase = List.from(cart.productsInCart);
+                final double purcheseTotalPrice = cart.totalPrice;
+
+                ref.read(purchaseManagerProvider).addPurchase(itemstToPurchase, purcheseTotalPrice);
+
                 Future.delayed(
                   const Duration(milliseconds: 500), () {
                   Navigator.pop(context);

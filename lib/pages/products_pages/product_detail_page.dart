@@ -8,13 +8,27 @@ import '../../core/widget/review_dialog.dart';
 import '../../services/manager/review_manager.dart';
 import '../../services/provider/cart_provider.dart';
 
-class ProductDetailPage extends ConsumerWidget {
+
+class ProductDetailPage extends ConsumerStatefulWidget { // Modifica qui
   final Product product;
 
   const ProductDetailPage({
     super.key,
     required this.product,
   });
+
+  @override
+  ConsumerState<ProductDetailPage> createState() => _ProductDetailPageState(); // Modifica qui
+}
+
+class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
+  late String _currentMainImg;
+
+  @override
+  void initState(){
+    super.initState();
+    _currentMainImg = widget.product.thumbnail;
+  }
 
   void _showReviewDialog(BuildContext context, Product product) async {
     final result = await showDialog<Map<String, dynamic>?>(
@@ -38,14 +52,14 @@ class ProductDetailPage extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext contex) {
     final reviewManager = ref.watch(reviewManagerProvider);
-    final productReviews = reviewManager.getReviewsForProduct(product.id.toString());
+    final productReviews = reviewManager.getReviewsForProduct(widget.product.id.toString());
     final cartRef = ref.watch(cartProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(product.title, style: TextStyle(color: AppColors.primary)),
+        title: Text(widget.product.title, style: TextStyle(color: AppColors.primary)),
         centerTitle: true,
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.primary,
@@ -60,7 +74,7 @@ class ProductDetailPage extends ConsumerWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12.0),
                 child: Image.network(
-                  product.thumbnail,
+                  _currentMainImg,
                   height: 250,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -71,10 +85,10 @@ class ProductDetailPage extends ConsumerWidget {
             ),
 
             const SizedBox(height: 16),
-            _buildImageGallery(product.images),
+            _buildImageGallery(widget.product.images),
             const SizedBox(height: 20),
             Text(
-              product.title,
+              widget.product.title,
               style: const TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
@@ -83,7 +97,7 @@ class ProductDetailPage extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '\€${product.price.toStringAsFixed(2)}',
+              '\€${widget.product.price.toStringAsFixed(2)}',
               style: const TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
@@ -91,14 +105,16 @@ class ProductDetailPage extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 8),
-            _buildDetailRow('Brand:', product.brand),
-            _buildDetailRow('Categoria:', product.category),
+            _buildDetailRow('Brand:', widget.product.brand),
+            _buildDetailRow('Categoria:', widget.product.category),
             const SizedBox(height: 16),
             Text(
-              product.description,
+              widget.product.description,
               style: TextStyle(fontSize: 16.0, color: AppColors.cardTextCol),
             ),
             const SizedBox(height: 20),
+            _cartButton(cartRef, context),
+            const SizedBox(height: 16),
             Text(
               'Recensioni',
               style: TextStyle(
@@ -125,43 +141,57 @@ class ProductDetailPage extends ConsumerWidget {
             const SizedBox(height: 20),
             Column(
               children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    cartRef.addToCart(product);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: AppColors.primary,
-                        content: Text(
-                          '${product.title} aggiunto al carrello!',
-                          style: TextStyle(color: AppColors.background)
-                        ),
-                        duration: const Duration(milliseconds: 500),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.shopping_cart, color: AppColors.cardTextCol),
-                  label: const Text('Aggiungi al Carrello', style: TextStyle(color: AppColors.cardTextCol)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.cardColor,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton.icon(
-                  onPressed: () => _showReviewDialog(context, product),
-                  icon: const Icon(Icons.rate_review, color: AppColors.cardTextCol),
-                  label: const Text('Lascia una recensione', style: TextStyle(color: AppColors.cardTextCol)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.cardColor,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  ),
-                ),
+                _reviewsButton(context),
               ],
             ),
             const SizedBox(height: 20),
           ],
+        ),
+      ),
+    );
+  }
+
+  SizedBox _reviewsButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: ElevatedButton.icon(
+        onPressed: () => _showReviewDialog(context, widget.product),
+        icon: const Icon(Icons.rate_review, color: AppColors.cardTextCol),
+        label: const Text('Lascia una recensione', style: TextStyle(color: AppColors.cardTextCol)),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.cardColor,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
+    );
+  }
+
+  SizedBox _cartButton(CartProvider cartRef, BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: ElevatedButton.icon(
+        onPressed: () {
+          cartRef.addToCart(widget.product);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: AppColors.cardColor,
+              content: Text(
+                  '${widget.product.title} aggiunto al carrello!',
+                  style: TextStyle(color: AppColors.cardTextCol)
+              ),
+              duration: const Duration(milliseconds: 500),
+            ),
+          );
+        },
+        icon: const Icon(Icons.shopping_cart, color: AppColors.cardTextCol),
+        label: const Text('Aggiungi al Carrello', style: TextStyle(color: AppColors.cardTextCol)),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.cardColor,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
     );
@@ -175,17 +205,25 @@ class ProductDetailPage extends ConsumerWidget {
         scrollDirection: Axis.horizontal,
         itemCount: images.length,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.network(
-                images[index],
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                const Icon(Icons.broken_image, size: 60, color: Colors.grey),
+          final imageUrl = images[index];
+          return GestureDetector(
+            onTap: () {
+             setState(() {
+               _currentMainImg = imageUrl;
+             });
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.network(
+                  imageUrl,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.broken_image, size: 60, color: Colors.grey),
+                ),
               ),
             ),
           );

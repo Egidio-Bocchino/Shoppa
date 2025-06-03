@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -9,7 +10,6 @@ import 'core/models/review_model.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
@@ -19,13 +19,18 @@ Future<void> main() async {
   final appDocDir = await getApplicationDocumentsDirectory();
   await Hive.initFlutter(appDocDir.path);
 
-  if(!Hive.isAdapterRegistered(ReviewAdapter().typeId)){
+  if (!Hive.isAdapterRegistered(ReviewAdapter().typeId)) {
     Hive.registerAdapter(ReviewAdapter());
   }
 
-  runApp(
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(
       const ProviderScope(child: MyApp()),
-  );
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {
