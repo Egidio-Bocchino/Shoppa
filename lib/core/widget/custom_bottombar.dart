@@ -104,6 +104,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           label: 'Cart',
         ),
         NavigationDestination(
+          key: const Key('account_tab_button'),
           icon: Icon(Icons.person, size: 40, color: AppColors.primary),
           label: 'Account',
         ),

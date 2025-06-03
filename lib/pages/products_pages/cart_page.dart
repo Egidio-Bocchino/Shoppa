@@ -95,6 +95,7 @@ class CartPage extends ConsumerWidget {
           SizedBox(
             width: double.infinity,
             child: FilledButton(
+              key: const Key('checkout_button'),
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all<Color>(AppColors.cardColor),
                 padding: WidgetStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.symmetric(vertical: 15.0)),

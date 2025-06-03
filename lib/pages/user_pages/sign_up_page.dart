@@ -53,6 +53,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(height: 10),
                 Text(
                   _errorMessage,
+                  key: const Key('signup_error_message'),
                   style: const TextStyle(color: Colors.red),
                 ),
                 const SizedBox(height: 30),
@@ -70,6 +71,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return SizedBox(
       width: 300,
       child: CustomPasswordBox(
+        key: const Key('signup_password_field'),
         controller: _passwordController,
         labelText: 'Password',
         validator: (value) {
@@ -89,6 +91,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return SizedBox(
       width: 300,
       child: CustomEmailBox(
+        key: const Key('signup_email_field'),
         controller: _emailController,
         labelText: 'Email',
         validator: (value) {
@@ -106,6 +109,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildSignUpButton() {
     return FilledButton(
+      key: const Key('create_account_button'),
       style: ButtonStyle(
         fixedSize: WidgetStateProperty.all(const Size.fromWidth(160)),
         backgroundColor: WidgetStateProperty.all(AppColors.cardColor),

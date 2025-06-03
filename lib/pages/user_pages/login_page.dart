@@ -44,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                const SizedBox(height: 10),
 
                Text(
+                 key: const Key('login_error_message'),
                  _errorMessage,
                  style: const TextStyle(color: Colors.red),
                ),
@@ -67,6 +68,7 @@ class _LoginPageState extends State<LoginPage> {
     return SizedBox(
      width: 300,
      child: CustomEmailBox(
+       key: const Key('login_email_field'),
        controller: _emailController,
 
        labelText: 'Email',
@@ -88,6 +90,7 @@ class _LoginPageState extends State<LoginPage> {
     return SizedBox(
       width: 300,
       child: CustomPasswordBox(
+        key: const Key('login_password_field'),
         controller: _passwordController,
 
         labelText: 'Password',
@@ -124,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
 
   FilledButton signUpButton(BuildContext context) {
     return FilledButton(
+      key: const Key('go_to_signup_button'),
       onPressed: () {
         Navigator.push(
           context,
@@ -144,6 +148,7 @@ class _LoginPageState extends State<LoginPage> {
 
   FilledButton loginButton(BuildContext context) {
     return FilledButton(
+      key: const Key('login_button'),
       onPressed: () async {
         if (_formKey.currentState!.validate()) {
           await _signIn();

@@ -132,6 +132,7 @@ class AccountPage extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: FilledButton(
+              key: const Key('logout_button'),
               onPressed: () {
                 _signOut(context);
               },
@@ -148,6 +149,7 @@ class AccountPage extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: FilledButton(
+              key: const Key('delete_account_button'),
               onPressed: () {
                 _deleteAccount(context);
                 ScaffoldMessenger.of(context).showSnackBar(
