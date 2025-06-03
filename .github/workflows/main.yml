@@ -1,6 +1,5 @@
 name: Flutter CI
-
-on: 
+on:
   push:
     branches: ['main']
 
@@ -10,12 +9,10 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-
       - name: Cache Flutter dependencies
         uses: actions/cache@v3
         with:
@@ -24,21 +21,16 @@ jobs:
             /opt/hostedtoolcache/flutter
             .dart_tool
             build
-          key: ${{ runner.os }}-flutter-${{ hashFiles('/pubspec.lock') }}
+          key: ${{ runner.os }}-flutter-${{ hashFiles('pubspec.lock') }}
           restore-keys: |
             ${{ runner.os }}-flutter-
-          
       - name: Flutter version
         run: flutter --version
-
       - name: Get dependencies
         run: flutter pub get
-
       - name: Run tests
         run: flutter test
-
       - name: Build APK
         run: flutter build apk
-
       - name: Build AppBundle
-        run: flutter build appbundle
+        run: flutter build appbundle
