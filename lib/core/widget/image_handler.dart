@@ -28,7 +28,7 @@ class ImageHandler {
     try {
       final Directory appDocDir = await getApplicationDocumentsDirectory();
       final String appDocPath = appDocDir.path;
-      // Previene nomi di file duplicati aggiungendo timestamp e prefisso
+      /// Previene nomi di file duplicati aggiungendo timestamp e prefisso
       final String fileName = '${fileNamePrefix}_${DateTime.now().millisecondsSinceEpoch}_${imageFile.path.split('/').last}';
       final File newImage = await imageFile.copy('$appDocPath/$fileName');
       return newImage.path;

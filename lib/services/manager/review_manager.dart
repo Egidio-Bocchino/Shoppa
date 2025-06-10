@@ -1,4 +1,3 @@
-// lib/services/manager/review_manager.dart (Nessuna modifica)
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +8,7 @@ import '../../core/widget/image_handler.dart';
 
 class ReviewManager extends ChangeNotifier {
   late Box<Review> _reviewsBox;
+  bool _isInitialized = false;
   final Uuid _uuid = Uuid();
   final ImageHandler _imageHandler = ImageHandler();
 
@@ -21,18 +21,28 @@ class ReviewManager extends ChangeNotifier {
       Hive.registerAdapter(ReviewAdapter());
     }
     _reviewsBox = await Hive.openBox<Review>('reviewsBox');
+    _isInitialized = true;
     notifyListeners();
   }
+
+  bool get isInitialized => _isInitialized;
 
   List<Review> get reviews => _reviewsBox.values.toList();
 
   List<Review> getReviewsForProduct(String productId) {
+    if(!_isInitialized) {
+      return [];
+    }
     return _reviewsBox.values
         .where((review) => review.productId == productId)
         .toList();
   }
 
   Future<void> addReview(Review review, File? imageFile) async {
+    if(!_isInitialized) {
+      return;
+    }
+
     final String newId = _uuid.v4();
     String? localImagePath;
 
@@ -56,6 +66,10 @@ class ReviewManager extends ChangeNotifier {
   }
 
   Future<void> deleteReview(String reviewId) async {
+    if(!_isInitialized) {
+      return;
+    }
+
     final Review? reviewToDelete = _reviewsBox.get(reviewId);
     if (reviewToDelete != null) {
       if (reviewToDelete.imageUrl != null && reviewToDelete.imageUrl!.isNotEmpty) {
