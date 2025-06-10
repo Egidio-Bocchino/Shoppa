@@ -55,6 +55,10 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
     final productReviews = reviewManager.getReviewsForProduct(widget.product.id.toString());
     final cartRef = ref.watch(cartProvider);
 
+    if(!reviewManager.isInitialized) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.product.title, style: TextStyle(color: AppColors.primary)),

@@ -8,9 +8,9 @@ import 'package:shoppa/core/models/product_model.dart';
 import 'package:shoppa/pages/products_pages/cart_page.dart';
 import 'package:shoppa/services/manager/purchase_manager.dart';
 import 'package:shoppa/services/provider/cart_provider.dart';
-import 'package:shoppa/core/widget/custom_bottombar.dart'; // Import corretto per CustomBottomNavigationBar
+import 'package:shoppa/core/widget/custom_bottombar.dart';
 
-import 'cart_page_widget_test.mocks.dart'; // Generato da build_runner
+import 'cart_page_widget_test.mocks.dart';
 
 // Genera i mock per i provider
 @GenerateMocks([CartProvider, PurchaseManager])
@@ -83,8 +83,8 @@ void main() {
 
       expect(find.text('Il tuo carrello è vuoto!'), findsOneWidget);
       expect(find.byIcon(Icons.shopping_cart_outlined), findsOneWidget);
-      expect(find.text('Procedi al Checkout'), findsNothing); // Il pulsante non deve esserci
-      expect(find.text('Totale:'), findsNothing); // Il totale non deve esserci
+      expect(find.text('Procedi al Checkout'), findsNothing);
+      expect(find.text('Totale:'), findsNothing);
     });
 
     testWidgets('Mostra i prodotti nel carrello e il totale quando il carrello non è vuoto', (WidgetTester tester) async {
