@@ -70,10 +70,8 @@ class CartProvider extends ChangeNotifier {
     int index = _productsInCart.indexWhere((item) => item.product.id == product.id);
     if (index != -1) {
       if (_productsInCart[index].quantity > 1) {
-        // Decrease quantity if greater than 1
         _productsInCart[index].quantity--;
       } else {
-        // Remove product if quantity is 1
         _productsInCart.removeAt(index);
       }
     }

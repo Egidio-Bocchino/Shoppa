@@ -232,8 +232,8 @@ class _ReviewDialogState extends ConsumerState<ReviewDialog> {
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    backgroundColor: AppColors.primary,
-                    content: Text('Recensione aggiunta con successo!', style: TextStyle(color: AppColors.background)),
+                    backgroundColor: AppColors.cardColor,
+                    content: Text('Recensione aggiunta con successo!', style: TextStyle(color: AppColors.cardTextCol)),
                     duration: const Duration(seconds: 2),
                   ),
                 );

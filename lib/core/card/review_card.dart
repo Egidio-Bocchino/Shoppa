@@ -1,4 +1,3 @@
-// lib/core/card/review_card.dart (Nessuna modifica)
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -132,16 +131,21 @@ class ReviewCard extends ConsumerWidget {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Conferma Eliminazione'),
-              content: const Text('Sei sicuro di voler eliminare questa recensione?'),
+              title: const Text('Conferma Eliminazione', style: TextStyle(color: AppColors.primary),),
+              content: const Text('Sei sicuro di voler eliminare questa recensione?', style: TextStyle(color: AppColors.cardTextCol),),
+              backgroundColor: AppColors.cardColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+                side: const BorderSide(color: AppColors.cardTextCol)
+              ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('Annulla'),
+                  child: const Text('Annulla', style: TextStyle(color: AppColors.primary),),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text('Elimina'),
+                  child: const Text('Elimina', style: TextStyle(color: AppColors.primary),),
                 ),
               ],
             );
@@ -150,7 +154,10 @@ class ReviewCard extends ConsumerWidget {
         if (confirmDelete == true) {
           await reviewManager.deleteReview(review.id);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Recensione eliminata')),
+            const SnackBar(
+              backgroundColor: AppColors.cardColor,
+              content: Text('Recensione eliminata', style: TextStyle(color: AppColors.cardTextCol))
+            ),
           );
           return true;
         }
