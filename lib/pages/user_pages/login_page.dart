@@ -32,31 +32,31 @@ class _LoginPageState extends State<LoginPage> {
           child: Form(
             key: _formKey,
             child: Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-              const SizedBox(height: 50,),
-               _emailBox(),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 50,),
+                _emailBox(),
 
-               const SizedBox(height: 15,),
+                const SizedBox(height: 15,),
 
-               _passwordBox(),
+                _passwordBox(),
 
-               const SizedBox(height: 10),
+                const SizedBox(height: 10),
 
-               Text(
-                 key: const Key('login_error_message'),
-                 _errorMessage,
-                 style: const TextStyle(color: Colors.red),
-               ),
+                Text(
+                  key: const Key('login_error_message'),
+                  _errorMessage,
+                  style: const TextStyle(color: Colors.red),
+                ),
 
-               const SizedBox(height: 15),
+                const SizedBox(height: 15),
 
-               loginButton(context),
+                loginButton(context),
 
-               const SizedBox(height: 10),
+                const SizedBox(height: 10),
 
-               signUpButton(context),
-             ],
+                signUpButton(context),
+              ],
             ),
           ),
         ),
@@ -100,7 +100,19 @@ class _LoginPageState extends State<LoginPage> {
             return 'Inserisci la tua password';
           }
           if (value.length < 6) {
-            return 'La password deve avere almeno 6 caratteri';
+            return 'La password deve avere \n almeno 6 caratteri';
+          }
+          if (!value.contains(RegExp(r'[A-Z]'))) {
+            return 'La password deve contenere \n almeno una lettera maiuscola';
+          }
+          if (!value.contains(RegExp(r'[a-z]'))) {
+            return 'La password deve contenere \n almeno una lettera minuscola';
+          }
+          if (!value.contains(RegExp(r'[0-9]'))) {
+            return 'La password deve contenere \n almeno un numero';
+          }
+          if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+            return 'La password deve contenere \n almeno un carattere speciale';
           }
           return null;
         },

@@ -76,10 +76,22 @@ class _SignUpPageState extends State<SignUpPage> {
         labelText: 'Password',
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Per favore, inserisci la tua password';
+            return 'Inserisci la tua password';
           }
           if (value.length < 6) {
-            return 'La password deve essere di almeno 6 caratteri';
+            return 'La password deve avere \n almeno 6 caratteri';
+          }
+          if (!value.contains(RegExp(r'[A-Z]'))) {
+            return 'La password deve contenere \n almeno una lettera maiuscola';
+          }
+          if (!value.contains(RegExp(r'[a-z]'))) {
+            return 'La password deve contenere \n almeno una lettera minuscola';
+          }
+          if (!value.contains(RegExp(r'[0-9]'))) {
+            return 'La password deve contenere \n almeno un numero';
+          }
+          if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+            return 'La password deve contenere \n almeno un carattere speciale';
           }
           return null;
         },
