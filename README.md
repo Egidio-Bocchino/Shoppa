@@ -1,16 +1,14 @@
 # shoppa
 
-A new Flutter project.
+Questa app rappresenta il mio progetto per Mobile
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+E' un semplice e-commerce che permette la gestione di prodotti di vario genere.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Le funzionalità prinxcipali sono :
+- nella Home di refreshare la pagina scorrendo dall'alto verso il basso,
+- aggiungere recensioni con voto, commento e foto del prodotto
+- avere un recap dell'ultimo acquisto effettuato nulla pagina Account
+- poter eliminare direttamente l'account corrente o fare un semplice logout
+- ricerca per nome tramite SearchBar o tramite categoria tramite i bottoni preposti 
