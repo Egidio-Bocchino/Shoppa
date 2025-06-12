@@ -92,11 +92,19 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  _productGrid(AsyncValue<List<Product>> productsAsyncValue) {
+  Widget _productGrid(AsyncValue<List<Product>> productsAsyncValue) {
     return SizedBox(
       child: productsAsyncValue.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Errore nel caricamento dei prodotti: $error')),
+        loading: () {
+          return const Center(
+              child: CircularProgressIndicator()
+          );
+        },
+        error: (error, stack) {
+          return Center(
+              child: Text('Errore nel caricamento dei prodotti: $error')
+          );
+        },
         data: (products) {
           final random = Random();
           final List<Product> shuffledProducts = List.from(products);
@@ -109,6 +117,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           }
 
           return GridView.builder(
+            key: const Key('home_page_product_grid'),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -121,14 +130,16 @@ class _HomePageState extends ConsumerState<HomePage> {
             itemCount: displayedProducts.length,
             itemBuilder: (context, index) {
               final product = displayedProducts[index];
+
               return ProductCard(
+                key: Key('product_card_${product.id}'),
                 product: product,
                 onTap: (){
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProductDetailPage(product: product)
-                    )
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProductDetailPage(product: product)
+                      )
                   );
                 },
               );

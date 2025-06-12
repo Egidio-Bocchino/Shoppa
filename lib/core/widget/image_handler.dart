@@ -1,4 +1,3 @@
-// lib/services/image/image_handler.dart
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -15,7 +14,6 @@ class ImageHandler {
         return File(pickedFile.path);
       }
     } catch (e) {
-      // Gestisci l'eccezione, ad esempio loggandola
       print('Errore nella selezione dell\'immagine: $e');
     }
     return null;

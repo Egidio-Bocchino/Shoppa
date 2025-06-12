@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shoppa/core/models/product_model.dart';
 import 'package:shoppa/services/provider/product_stream_provider.dart';
-
 import '../../core/exception/data_parsing_exception.dart';
 import '../../core/exception/exception_handler.dart';
 
@@ -35,7 +34,6 @@ class SearchProvider{
     );
   }
 }
-
 
 final productSearchManagerProvider = Provider<SearchProvider>((ref) {
   return SearchProvider(ref);

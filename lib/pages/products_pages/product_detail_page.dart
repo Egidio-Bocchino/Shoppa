@@ -172,6 +172,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
 
   SizedBox _cartButton(CartProvider cartRef, BuildContext context) {
     return SizedBox(
+      key: Key('add_to_cart_button_product_${widget.product.id}'),
       width: double.infinity,
       height: 50,
       child: ElevatedButton.icon(

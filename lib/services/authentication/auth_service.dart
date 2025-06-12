@@ -39,7 +39,7 @@ class AuthService{
 
   Future<void> deleteAccount() async {
     try {
-      await authService.value.deleteAccount();
+      await currentUser?.delete();
     } on FirebaseAuthException catch (e) {
       print(e.message);
     }on FirebaseException catch(e){

@@ -100,6 +100,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           label: 'Home',
         ),
         NavigationDestination(
+          key: Key('cart_icon_button'),
           icon: Icon(Icons.shopping_cart, size: 40, color: AppColors.primary),
           label: 'Cart',
         ),

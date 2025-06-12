@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shoppa/core/models/product_model.dart';
-
 import '../theme/app_colors.dart';
 
 class ProductCard extends StatelessWidget {
